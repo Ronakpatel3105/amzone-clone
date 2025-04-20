@@ -50,4 +50,17 @@ class ProductRepository {
       throw Exception('Failed to load products for category: $category');
     }
   }
+
+  Future<List<Product>> searchProducts(String query) async {
+    final response = await http.get(Uri.parse('${AppConstants.baseUrl}${AppConstants.productsEndpoint}'));
+    if (response.statusCode == 200) {
+      final List<dynamic> productsJson = json.decode(response.body);
+      return productsJson
+          .map((json) => Product.fromJson(json))
+          .where((product) => product.title.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } else {
+      throw Exception('Failed to search products');
+    }
+  }
 }

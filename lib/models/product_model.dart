@@ -8,6 +8,7 @@ class Product extends Equatable {
   final String category;
   final String image;
   final Rating rating;
+  final String bestUri;
 
   const Product({
     required this.id,
@@ -17,21 +18,24 @@ class Product extends Equatable {
     required this.category,
     required this.image,
     required this.rating,
+    this.bestUri = '/product/{id}',
   });
 
   @override
   List<Object?> get props =>
-      [id, title, price, description, category, image, rating];
+      [id, title, price, description, category, image, rating, bestUri];
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    final id = json['id'];
     return Product(
-      id: json['id'],
+      id: id,
       title: json['title'],
       price: json['price'].toDouble(),
       description: json['description'],
       category: json['category'],
       image: json['image'],
       rating: Rating.fromJson(json['rating']),
+      bestUri: json['bestUri'] ?? '/product/$id',
     );
   }
 
@@ -44,6 +48,7 @@ class Product extends Equatable {
       'category': category,
       'image': image,
       'rating': rating.toJson(),
+      'bestUri': bestUri.isNotEmpty ? bestUri : '/product/$id',
     };
   }
 }

@@ -7,6 +7,7 @@ import '../blocs/product/product_state.dart';
 import '../constants/app_constants.dart';
 import '../widgets/product_card.dart';
 import 'product_detail_screen.dart';
+import 'main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _searchQuery = '';
+
   @override
   void initState() {
     super.initState();
@@ -66,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           icon: const Icon(Icons.shopping_cart, color: Colors.white),
           onPressed: () {
-            // Navigate to cart screen
+            MainScreen.navigateToTab(context, 2); // Navigate to cart tab
           },
         ),
       ],
@@ -89,6 +92,16 @@ class _HomeScreenState extends State<HomeScreen> {
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 12),
           ),
+          onChanged: (value) {
+            setState(() {
+              _searchQuery = value;
+            });
+            if (value.isNotEmpty) {
+              context.read<ProductBloc>().add(SearchProducts(value));
+            } else {
+              context.read<ProductBloc>().add(const FetchProducts());
+            }
+          },
         ),
       ),
     );
@@ -204,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              AppConstants.recommendedForYou,
+              _searchQuery.isEmpty ? AppConstants.recommendedForYou : 'Search Results',
               style: AppConstants.headline3,
             ),
           ),
@@ -238,19 +251,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 );
               }
-
+              if (state is SearchResultsLoaded) {
+                if (state.products.isEmpty) {
+                  return const Center(child: Text('No products found.'));
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                    childAspectRatio: 0.7,
+                  ),
+                  itemCount: state.products.length,
+                  itemBuilder: (context, index) {
+                    return ProductCard(product: state.products[index], onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductDetailScreen(product: state.products[index]),
+                        ),
+                      );
+                    });
+                  },
+                );
+              }
               if (state is ProductLoading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-
               if (state is ProductError) {
                 return Center(
                   child: Text(state.message),
                 );
               }
-
               return const Center(
                 child: Text('No products found'),
               );

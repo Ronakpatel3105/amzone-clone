@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/app_constants.dart';
 import '../blocs/product/product_bloc.dart';
 import '../blocs/product/product_event.dart';
-import 'main_screen.dart';
 
 class MenuScreen extends StatelessWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+  const MenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -417,17 +416,13 @@ class MenuScreen extends StatelessWidget {
   void _switchToHomeTab(BuildContext context) {
     // Find the nearest TabController ancestor and use it to navigate
     final tabController = DefaultTabController.of(context);
-    if (tabController != null) {
-      tabController.animateTo(0); // Home tab is at index 0
-    }
+    tabController.animateTo(0); // Home tab is at index 0
   }
 
   void _navigateToAccountTab(BuildContext context) {
     // Find the nearest TabController ancestor and use it to navigate
     final tabController = DefaultTabController.of(context);
-    if (tabController != null) {
-      tabController.animateTo(1); // Account tab is at index 1
-    }
+    tabController.animateTo(1); // Account tab is at index 1
   }
 
   void _showAboutAppDialog(BuildContext context) {

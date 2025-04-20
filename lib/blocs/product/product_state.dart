@@ -51,3 +51,12 @@ class ProductError extends ProductState {
   @override
   List<Object?> get props => [message];
 }
+
+class SearchResultsLoaded extends ProductState {
+  final List<Product> products;
+
+  const SearchResultsLoaded(this.products);
+
+  @override
+  List<Object?> get props => [products];
+}

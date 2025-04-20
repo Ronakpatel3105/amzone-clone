@@ -5,6 +5,7 @@ import '../blocs/cart/cart_bloc.dart';
 import '../blocs/cart/cart_event.dart';
 import '../constants/app_constants.dart';
 import '../models/product_model.dart';
+import 'main_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -36,7 +37,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           IconButton(
             icon: const Icon(Icons.shopping_cart, color: Colors.white),
             onPressed: () {
-              // Navigate to cart
+              MainScreen.navigateToTab(context, 2); // Navigate to cart tab
             },
           ),
         ],

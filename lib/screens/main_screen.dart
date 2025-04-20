@@ -9,7 +9,7 @@ class MainScreen extends StatefulWidget {
   static final GlobalKey<_MainScreenState> mainScreenKey =
       GlobalKey<_MainScreenState>();
 
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   // Static method to navigate to a specific tab from anywhere in the app
   static void navigateToTab(BuildContext context, int index) {

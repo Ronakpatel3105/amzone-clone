@@ -12,6 +12,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<FetchProductById>(_onFetchProductById);
     on<FetchCategories>(_onFetchCategories);
     on<FetchProductsByCategory>(_onFetchProductsByCategory);
+    on<SearchProducts>(_onSearchProducts);
   }
 
   Future<void> _onFetchProducts(
@@ -54,6 +55,17 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final products =
           await productRepository.fetchProductsByCategory(event.category);
       emit(ProductsLoaded(products));
+    } catch (e) {
+      emit(ProductError(e.toString()));
+    }
+  }
+
+  Future<void> _onSearchProducts(
+      SearchProducts event, Emitter<ProductState> emit) async {
+    emit(const ProductLoading());
+    try {
+      final products = await productRepository.searchProducts(event.query);
+      emit(SearchResultsLoaded(products));
     } catch (e) {
       emit(ProductError(e.toString()));
     }
